@@ -1,5 +1,9 @@
 # belly-button-challenge
 
+## Deployed Dashboard
+
+[Deployed dashboard link]( https://honorinekay.github.io/belly-button-challenge/)
+
 ## Background
 
 In this challenge, we  will build an interactive dashboard to explore the Belly Button Biodiversity dataset, which catalogs the microbes that colonize human navels.
