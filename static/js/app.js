@@ -84,6 +84,7 @@ function buildcharts(sample) {
     let traceBubble = {
         x: otu_ids,
         y: sample_values,
+        text: otu_labels,
         mode: 'markers',
         marker: {
           size: sample_values,
@@ -98,7 +99,8 @@ function buildcharts(sample) {
       title: "Bacteria in Sample",
       showlegend: false,
       xaxis: {title: "OTU ID"},
-      yaxis: {title: "Sample Values"}
+      yaxis: {title: "Sample Values"},
+      hovermode: "closest",
 
     }
 
@@ -171,6 +173,19 @@ function buildMetadata(sample) {
   });
 }
 
+/*
+create event lister function
+the function has a name
+<select id="selDataset" onchange="optionChanged(this.value)"></select>
+6. Update all the plots when a new sample is selected. Additionally, you are welcome to create any layout that you would like for your dashboard. 
+*/
+function optionChanged(newSample){
+  // buildcharts
+  buildcharts(newSample);
+
+  // update the metadata Panel
+  buildMetadata(newSample);
+};
 
 
 
@@ -215,9 +230,9 @@ function initialize() {
             .append("option")
             .text(sampleNames[index])
             .property("value", sampleNames[index])
+ };
 
-      
-    };
+   let firstSample = sampleNames[0];
 
 
      // call buildcharts function
