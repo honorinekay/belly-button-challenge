@@ -114,6 +114,33 @@ function buildcharts(sample) {
     // build bubble chart in <div id="bubble"></div>
     Plotly.newPlot('bubble', dataBubble, layoutBubble ); 
 
+    // build horizontal bar chart
+
+/*
+2. Create a horizontal bar chart with a dropdown menu to display the top 10 OTUs found in that individual.
+
+    Use sample_values as the values for the bar chart.
+
+    Use otu_ids as the labels for the bar chart.
+
+    Use otu_labels as the hovertext for the chart.
+
+ */
+   let dataBar = [{
+       x: sample_values.slice(0,10).reverse(),
+       y: otu_ids.slice(0,10).map(otuID => `OTU ${otuID}`).reverse(),
+       text: otu_labels.slice(0,10).reverse(),
+       type: 'bar',
+       orientation: "h"
+   }];
+
+   let layoutBar = {
+       title: "Top 10 Bacteria in Sample",
+   }
+
+// create plot in the  <div id="bar"></div>
+Plotly.newPlot('bar', dataBar, layoutBar);
+
 // Note Data is not available below this point
 });
 
