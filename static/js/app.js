@@ -51,44 +51,35 @@ d3.json(sample_data).then(function(data) {
 function buildcharts(sample) {
   console.log("testing buildcharts function");
   d3.json(sample_data).then(function(data) {
-    console.log("This is sample data");
-    console.log(data);
+    //console.log("This is sample data");
+    //console.log(data);
 
     // to build the barchart need the samples object
     let samples = data.samples
     // view in console
-    console.log(samples);
+    //console.log(samples);
 
     // filter samples for the given sample (i.e. 940)
     let sampleArray = samples.filter(sampleobject => sampleobject.id ==sample);
     // view sampleArray
-    console.log(sampleArray);
+    //console.log(sampleArray);
 
     // unpack the object from within the array
     let sampleResult = sampleArray[0];
-    console.log(sampleResult);
+    //console.log(sampleResult);
 
     // create variables
     let sample_values = sampleResult.sample_values;
-    console.log(sample_values);
+    //console.log(sample_values);
 
     let otu_ids = sampleResult.otu_ids;
-    console.log(otu_ids);
+    //console.log(otu_ids);
 
     let otu_labels = sampleResult.otu_labels;
-    console.log(otu_labels);
+    //console.log(otu_labels);
 
     // Build Bubblechart
 
-       // Use otu_ids for the x values.
-
-       // Use sample_values for the y values.
-
-       // Use sample_values for the marker size.
-
-      // Use otu_ids for the marker colors.
-
-     // Use otu_labels for the text values.
     // create trace
     let traceBubble = {
         x: otu_ids,
@@ -116,16 +107,6 @@ function buildcharts(sample) {
 
     // build horizontal bar chart
 
-/*
-2. Create a horizontal bar chart with a dropdown menu to display the top 10 OTUs found in that individual.
-
-    Use sample_values as the values for the bar chart.
-
-    Use otu_ids as the labels for the bar chart.
-
-    Use otu_labels as the hovertext for the chart.
-
- */
    let dataBar = [{
        x: sample_values.slice(0,10).reverse(),
        y: otu_ids.slice(0,10).map(otuID => `OTU ${otuID}`).reverse(),
@@ -145,10 +126,50 @@ Plotly.newPlot('bar', dataBar, layoutBar);
 });
 
 };
+/*
+4. Display the sample metadata, i.e., an individual's demographic information.
 
-    
+5. Display each key-value pair from the metadata JSON object somewhere on the page. 
+*/
 
+function buildMetadata(sample) {
+  d3.json(sample_data).then(function(data){
+     console.log("This is sample data")
+     console.log(data);
 
+     let metadata = data.metadata;
+     // view in console
+     console.log(metadata);
+
+     // filter samples for the given sample (i.e. 940)
+    let metadataArray = metadata.filter(metadataobject => metadataobject.id == sample);
+    // view metadataArray
+    console.log(metadataArray);
+
+    // unpack the object using indexing
+    let metadataResult = metadataArray[0];
+    // view in console
+    console.log("This is metadataResult");
+    console.log(metadataResult)
+
+    // use d3.select() to get <div id="sample-metadata" class="panel-body"></div>
+    // when using id to select "#sample-metadata"
+    // assign to a variable
+    let metadataPanel = d3.select("#sample-metadata");
+
+    // need to wipe clean the metadataPanel, using html("")
+    metadataPanel.html("");
+
+    // iterate over each key value pair in metadataResult and append to the metadataPanel
+    for (key in metadataResult){
+      metadataPanel.append("h5").text(`${key.toUpperCase()}: ${metadataResult[key]}`);
+    };
+  
+  
+  
+    // Note Data is not available below this point
+  });
+}
 
 
 
@@ -174,10 +195,38 @@ Plotly.newPlot('bar', dataBar, layoutBar);
 
 // create an initial function called initialize
 function initialize() {
+  d3.json(sample_data).then(function(data){
+    // console.log("This is sample data")
+    // console.log(data);
+    
+    let sampleNames = data.names;
+    // view in console
+    console.log(sampleNames);
+
+    // populate pulldown menu
+    // ref MDN for the select statement
+    // use d3.select to get <select id="selDataset" onchange="optionChanged(this.value)"></select>
+    let pulldownSelect = d3.select("#selDataset");
+
+    // iterate over each name in sampleNames add option, value, text for each sampleName
+    for (let index = 0; index < sampleNames.length; index++) {
+        // start with the pulldownSelect and chain
+        pulldownSelect
+            .append("option")
+            .text(sampleNames[index])
+            .property("value", sampleNames[index])
+
+      
+    };
 
 
      // call buildcharts function
      buildcharts(940);
+
+     // call buildMetadata(sample)
+     buildMetadata(940);
+     // Note Data is not available below this point
+  });
 
 };
 
